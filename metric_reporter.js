@@ -12,7 +12,7 @@ class MetricReporter {
         driverName = driverName || "";
         this._driver = Drivers.getDriver(driverName);
         if (this._driver == null) {
-            let errMsg = 'Metric Reporter: error driver: ' + driverName + ' not found!';
+            const errMsg = 'Metric Reporter: error driver: ' + driverName + ' not found!';
             log.error(errMsg);
             throw new Error(errMsg);
         }
@@ -42,7 +42,6 @@ class MetricReporter {
         }
 
         this._safeMetric(name, value, tags);
-        return Promise.resolve();
     }
 
     async stop() {
@@ -54,25 +53,20 @@ class MetricReporter {
         this._isRunning = false;
         clearInterval(this._flush_interval);
 
-        try {
-            await this._flushAll();
-        } catch (err) {
-            return Promise.reject(err);
-        }
-        return Promise.resolve();
+        await this._flushAll();
     }
 
     _safeMetric(name, value, tags) {
         let hashKey = this._calcHash(name, tags);
 
         if (hashKey in this._metrics) {
-            let metric = this._metrics[hashKey];
+            const metric = this._metrics[hashKey];
 
             metric.points.push([moment().unix(), value]);
 
             this._flush(false, metric).then(_ => {}).catch(_ => {});
         } else {
-            let metric = {
+            const metric = {
                 name: name,
                 points: [],
                 tags: tags,
@@ -89,15 +83,15 @@ class MetricReporter {
         let hashData = name;
 
         let hashList = [];
-        for (let key in tags) {
-            let tag = tags[key];
+        for (const key in tags) {
+            const tag = tags[key];
 
             hashList.push(key);
             hashList.push(tag);
         }
         hashList = hashList.sort();
 
-        for (var index in hashList) {
+        for (const index in hashList) {
             hashData += hashList[index];
         }
 
@@ -110,7 +104,7 @@ class MetricReporter {
     };
 
     async _flush(isForce, metric) {
-        let isNeedSend = metric.points.length != 0 && (isForce ||
+        const isNeedSend = metric.points.length != 0 && (isForce ||
             (metric.points.length >= this._maxMetrics));
 
         if (isNeedSend) {
@@ -124,28 +118,20 @@ class MetricReporter {
                 await this._driver.send(metricName, metricPoints, metricTags);
             } catch (err) {
                 log.error("Metric reporter: " + err);
-                return Promise.reject(err);
+                throw err;
             }
         }
-
-        return Promise.resolve();
     }
 
     async _flushAll() {
         for (let key in this._metrics) {
-            let metric = this._metrics[key];
+            const metric = this._metrics[key];
 
-            try {
-                await this._flush(true, metric);
-            } catch (err) {
-                return Promise.reject(err);
-            }
+            await this._flush(true, metric);
         }
 
         // clear all metrics
         this._metrics = {};
-
-        return Promise.resolve('Flushed metrics');
     }
 }
 

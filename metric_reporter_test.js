@@ -18,7 +18,7 @@ function test_metrics() {
         60, 100, "", new log2());
 
     console.info("start test");
-    for (var i = 0; i < 123; i++) {
+    for (var i = 0; i < 323; i++) {
         reporter.send("g8y3e_test_metric_43", 1, {
             "test": "test"
         }).then(res => {});
@@ -41,4 +41,4 @@ function test_metrics() {
 
 }
 
-//test_metrics();
+test_metrics();

@@ -6,7 +6,7 @@
   "author": "g8y3e",
   "license": "MIT",
   "dependencies": {
-    "request": "2.88.0",
+    "superagent": "5.3.1",
     "moment": "2.23.0"
   },
   "devDependencies": {

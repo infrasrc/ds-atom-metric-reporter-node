@@ -2,11 +2,10 @@
 
 const log = require('../log'),
       moment = require('moment'),
-      request = require('request');
+      request = require('superagent');
 
 class Datadog {
     constructor() {
-        this._timeout = 2 * 60 * 1000; // 2 min
     }
 
     init(opt) {
@@ -19,8 +18,8 @@ class Datadog {
         this._url = "https://app.datadoghq.com/api/v1/series?api_key=" + apiKey;
     }
 
-    send(name, values, tags) {
-        let sendData = {
+    async send(name, values, tags) {
+        const sendData = {
             metric: name,
             points: values
         };
@@ -29,21 +28,11 @@ class Datadog {
             sendData.tags = tags
         }
 
-        let self = this;
-        return new Promise((resolve, reject) => {
-            request.post(self._url, {
-                json: sendData,
-                timeout: self._timeout
-            }, function (err, res, body) {
-                if (err != null) {
-                    reject(err);
-                } else if (res != null && res.statusCode != 202) {
-                    reject(body.errors ? JSON.stringify(body.errors) : res.statusCode);
-                } else {
-                    resolve(body);
-                }
-            });
-        });
+        const res = await request.post(this._url)
+            .set("Content-Type", "application/json")
+            .send(sendData);
+        if (res.statusCode && res.statusCode != 202)
+            throw `Got error ${res.statusCode}`;
     }
 }
 

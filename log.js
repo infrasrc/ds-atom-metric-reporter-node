@@ -1,4 +1,4 @@
-var log;
+let log;
 
 function init(localLog) {
     log = localLog

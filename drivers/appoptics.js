@@ -1,6 +1,6 @@
 'use strict';
 
-const request = require('request'),
+const request = require('superagent'),
       log = require('../log');
 
 class AppOptics {
@@ -15,17 +15,17 @@ class AppOptics {
             throw new Error(errorMsg);
         }
 
-        let buff = new Buffer(opt.token + ':');
+        const buff = new Buffer(opt.token + ':');
         this._token = 'Basic ' + buff.toString('base64');
     }
 
     _collectValues(name, values) {
-        let valuesMap = {};
-        for (let index in values) {
-            let value = values[index];
-            let key = value[0] - value[0] % 60;
+        const valuesMap = {};
+        for (const index in values) {
+            const value = values[index];
+            const key = value[0] - value[0] % 60;
             if (key in valuesMap) {
-                let valueObj = valuesMap[key];
+                const valueObj = valuesMap[key];
                 valueObj.count += 1;
                 valueObj.sum += value[1];
 
@@ -38,7 +38,7 @@ class AppOptics {
                 }
             } else {
                 // init value
-                let valueObj = {
+                const valueObj = {
                     name: name,
                     period: 60,
                     time: key,
@@ -55,16 +55,16 @@ class AppOptics {
         return Array.from(Object.values(valuesMap));
     }
 
-    send(name, values, tags) {
+    async send(name, values, tags) {
         if (tags == null || Object.keys(tags).length == 0) {
             tags = {
                 general: "general"
             }
         }
 
-        let newTags = {};
-        for (let key in tags) {
-            let tag = tags[key];
+        const newTags = {};
+        for (const key in tags) {
+            const tag = tags[key];
             if (tag.length > 0) {
                 newTags[key] = tag.replace(" ", "_");
             } else {
@@ -72,32 +72,17 @@ class AppOptics {
             }
         }
 
-        let sendData = {
+        const sendData = {
             tags: newTags,
             measurements: this._collectValues(name, values)
         };
 
-        let self = this;
-
-        return new Promise((resolve, reject) => {
-            request.post({
-                uri: self._url,
-                json: sendData,
-                timeout: self._timeout,
-                headers: {
-                    "Authorization": self._token,
-                    "Content-Type": "application/json"
-                }
-            }, function (err, res, body) {
-                if (err != null) {
-                    reject(err);
-                } else if (res != null && res.statusCode != 202) {
-                    reject(res.body ? res.body : res.statusCode);
-                } else {
-                    resolve(body);
-                }
-            });
-        });
+        const res = await request.post(this._url)
+            .set("Authorization", this._token)
+            .set("Content-Type", "application/json")
+            .send(sendData);
+        if (res.statusCode && res.statusCode != 202)
+            throw `Got error ${res.statusCode}`;
     }
 }
 
