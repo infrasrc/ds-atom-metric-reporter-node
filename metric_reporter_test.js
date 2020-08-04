@@ -35,10 +35,10 @@ function test_metrics() {
     ['exit', 'SIGINT', 'SIGHUP', 'SIGQUIT', 'SIGABRT', 'SIGTERM'].map(function (event) {
         process.on(event, () => {
             console.info('SIGTERM signal received: ' + event);
-            reporter.stop().then(res => {}).catch(reason => {});
+            reporter.stop().then(_ => {}).catch(_ => {});
         });
     });
 
 }
 
-test_metrics();
+//test_metrics();
