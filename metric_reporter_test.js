@@ -15,22 +15,22 @@ class log2 {
 function test_metrics() {
     let reporter = new MetricReporter("appoptics",
         {token: "test"},
-        2, 100, "", new log2());
+        60, 100, "", new log2());
 
     console.info("start test");
-    for (var i = 0; i < 200; i++) {
-        reporter.send("g8y3e_test_metric", Math.floor(Math.random() * Math.floor(10)), {
+    for (var i = 0; i < 123; i++) {
+        reporter.send("g8y3e_test_metric_43", 1, {
             "test": "test"
         }).then(res => {});
     }
 
-    setTimeout(function() {
+    /*setTimeout(function() {
         for (var i = 0; i < 200; i++) {
-            reporter.send("g8y3e_test_metric", Math.floor(Math.random() * Math.floor(10)), {
+            reporter.send("g8y3e_test_metric_2", Math.floor(Math.random() * Math.floor(10)), {
                 "test": "test"
             }).then(res => {});
         }
-    }, 3000);
+    }, 3000);*/
 
     ['exit', 'SIGINT', 'SIGHUP', 'SIGQUIT', 'SIGABRT', 'SIGTERM'].map(function (event) {
         process.on(event, () => {

@@ -1,6 +1,6 @@
 {
   "name": "ds-metric-reporter-node",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "DS-Atom Metric Reporter",
   "main": "metric_reporter.js",
   "author": "g8y3e",

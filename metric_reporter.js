@@ -32,7 +32,7 @@ class MetricReporter {
 
         let self = this;
         this._flush_interval = setInterval(function () {
-            self._flushAll().then(res => {}).catch(reason => {});
+            self._flushAll().then(_ => {}).catch(_ => {});
         }, this._interval * 1000);
     }
 
@@ -70,7 +70,7 @@ class MetricReporter {
 
             metric.points.push([moment().unix(), value]);
 
-            this._flush(false, metric).then(res => {}).catch(reason => {});
+            this._flush(false, metric).then(_ => {}).catch(_ => {});
         } else {
             let metric = {
                 name: name,
