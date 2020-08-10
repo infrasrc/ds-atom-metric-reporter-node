@@ -1,9 +1,9 @@
-# metric-reporter-node   
+# ds-atom-metric-reporter-node   
 
 [![License][license-image]][license-url]
 [![Docs][docs-image]][docs-url]
 
-metric-reporter-node is SDK for Node.JS Javascript to send reports for applications monitoring like: [Datadog](https://www.datadoghq.com/), 
+ds-atom-metric-reporter-node is SDK for Node.JS Javascript to send reports for applications monitoring like: [Datadog](https://www.datadoghq.com/), 
 [Appoptics](https://www.appoptics.com) etc.
 
 - [Documentation][docs-url]

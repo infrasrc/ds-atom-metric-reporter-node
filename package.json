@@ -1,0 +1,33 @@
+{
+  "name": "ds-metric-reporter-node",
+  "version": "1.0.0",
+  "description": "DS-Atom Metric Reporter",
+  "main": "metric_reporter.js",
+  "author": "g8y3e",
+  "license": "MIT",
+  "dependencies": {
+    "superagent": "5.3.1",
+    "moment": "2.23.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5",
+    "jsdoc": "^3.4.3"
+  },
+  "scripts": {
+    "start": "NODE_OPTIONS=\"--trace-warnings\" node metric_reporter_test.js",
+    "test": "mocha --timeout 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infrasrc/ds-atom-metric-reporter-node.git"
+  },
+  "keywords": [
+    "reporter"
+  ],
+  "bugs": {
+    "url": "https://github.com/infrasrc/ds-atom-metric-reporter-node/issues"
+  },
+  "homepage": "https://github.com/infrasrc/ds-atom-metric-reporter-node#readme"
+}
